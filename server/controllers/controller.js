@@ -5,18 +5,17 @@ import { jwt } from "jsonwebtoken"
 import ENV from "../config.js"
 
 //  middleware for verify user 
-
-export async function verifyUser(req, res, next){
+export async function verifyUser(req, res, next) {
     try {
-        const { username} = req.method == "GET" ? req.query : req.body;
+        const { username } = req.method == "GET" ? req.query : req.body;
 
         //  check th euser existance
-         let exist = await UserModel.findOne({username});
-         if(!exist) return res.status(401).send("Invalid Credentials or User not found");
-         next()
+        let exist = await UserModel.findOne({ username });
+        if (!exist) return res.status(401).send("Invalid Credentials or User not found");
+        next()
 
     } catch (error) {
-        return res.status(404).send({ error: "Authentication Error"}) ;       
+        return res.status(404).send({ error: "Authentication Error" });
     }
 }
 
@@ -98,8 +97,8 @@ export async function login(req, res) {
                         }, ENV.JWT_SECRET, { expiresIn: "24h" });
 
                         return res.status(200).send({
-                            msg:"Login Succcessfull",
-                            username:user.username,
+                            msg: "Login Succcessfull",
+                            username: user.username,
                             token
                         });
 
@@ -126,7 +125,23 @@ export async function login(req, res) {
 
 // get user 
 export async function getUser(req, res) {
-    res.json("getuser route controller")
+    const { username } = req.params;
+    try {
+        if (!username) return res.status(501).send({ error: " Invalid Username" })
+
+        UserModel.findOne({ username }, function (err, user) {
+            if (err) return res.staus(500).send({ err })
+            if (!user) return res.staus(501).send({ err: "Couldn't find the User" });
+
+            // remove password form database
+            // mongoose return unnecessary data with object so convert it into json
+            const { password, ...rest} = Object.assign({}, user.toJSON());
+            return res.status(201).send(user);
+
+        })
+    } catch (error) {
+        return res.status(404).send({ error: "Can not find user data" })
+    }
 }
 
 
