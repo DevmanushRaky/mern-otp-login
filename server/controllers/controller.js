@@ -135,7 +135,7 @@ export async function getUser(req, res) {
 
             // remove password form database
             // mongoose return unnecessary data with object so convert it into json
-            const { password, ...rest} = Object.assign({}, user.toJSON());
+            const { password, ...rest } = Object.assign({}, user.toJSON());
             return res.status(201).send(user);
 
         })
@@ -147,7 +147,23 @@ export async function getUser(req, res) {
 
 // update user info
 export async function updateUser(req, res) {
-    res.json("update user route controller")
+    try {
+        const id = req.query.id;
+        if (id) {
+            const body = req.body;
+
+            // update the data
+            UserModel.updateOne({ _id: id }, body, function(err, data) {
+                if(err) throw err;
+                return res.status(201).send({ msg: "Record Updated " });
+            })
+        } else {
+            return res.status(401).send({ error: "user not found" });
+        }
+
+    } catch (error) {
+        return res.status(401).send({ error });
+    }
 }
 
 // generate otp
