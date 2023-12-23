@@ -18,3 +18,13 @@ export default async function Auth(req, res, next) {
         res.status(401).send({ ERROR: "AUTHENTICATION FAIL" });
     }
 }
+
+
+// for generate otp and verify otp
+export function localVariables(req, res, next){
+    req.app.locals = {
+        OTP: null,
+        resetSession: false
+    }
+    next()
+}
