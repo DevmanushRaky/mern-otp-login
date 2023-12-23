@@ -189,15 +189,39 @@ export async function createResetSession(req, res) {
         req.app.locals.resetSession = false; // allow access to this route only once 
         return res.status(201).send({ msg: " Access granted for reset password " })
     }
-    return res.status(440).send({ error: " Session expired " })
+    return res.status(404).send({ error: " Session expired " })
 }
 
 // reset password when user have valid session 
 export async function resetPassword(req, res) {
-    res.json(" reset password  route controller")
+    try {
+        if(!req.app.locals.resetSession){
+            return res.status(404).send({ error: " Session expired " }) 
+        }
+        const { username, password } = req.body();
+        try {
+            UserModel.findOne({ username })
+                .then(user => {
+                    bcrypt.hash(password, 10)
+                        .then(hashedPassword => {
+                            UserModel.updateOne({ username: user.username },
+                            { password, hashedPassword }, function(err, data) {
+                                if (err) throw err;
+                                req.app.locals.resetSession = false
+                                return res.status(201).send({ msg: " Password Updated successfull" });
+                            });
+                        })
+                        .catch(e => {
+                            return res.status(500).send({ error: "Eb=nable to hashed password " })
+                        })
+                })
+                .catch(error => {
+                    return res.status(404).send({ error: " username not found" })
+                })
+        } catch (error) {
+            return res.status(500).send({ error });
+        }
+    } catch (error) {
+        return res.status(401).send({ error })
+    }
 }
-
-
-
-
-
