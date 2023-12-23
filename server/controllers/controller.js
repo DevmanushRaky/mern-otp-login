@@ -170,7 +170,6 @@ export async function updateUser(req, res) {
 export async function generateOTP(req, res) {
     req.app.locals.OTP = otpGenerator.generate(6, { lowerCaseAlphabets: false, upperCaseAlphabets: false, specialChars: false })
     res.status(201).send({ code: req.app.locals.OTP })
-
 }
 
 // verify otp 
@@ -179,7 +178,6 @@ export async function verifyOTP(req, res) {
     if (parseInt(req.app.locals.OTP) === parseInt(code)) {
         req.app.locals.OTP = null;  // reset the otop value
         req.app.locals.resetSession = true;  // start the session for reset password 
-
         return res.status(201).send({ msg: " Verify OTP successfully" })
     }
     return res.status(401).send({ error: " Invalid OTP" });
@@ -187,7 +185,11 @@ export async function verifyOTP(req, res) {
 
 // successfully redirect user when OTP is valid
 export async function createResetSession(req, res) {
-    res.json("create reset session  route controller")
+    if (req.app.locals.resetSession) {
+        req.app.locals.resetSession = false; // allow access to this route only once 
+        return res.status(201).send({ msg: " Access granted for reset password " })
+    }
+    return res.status(440).send({ error: " Session expired " })
 }
 
 // reset password when user have valid session 
