@@ -40,7 +40,7 @@ export default function Recovery() {
       error: <b>Failed to Send Email</b>
     })
     sendPromise.then(OTP => {
-      console.log(OTP)
+      // console.log(OTP)
     })
   }
 
