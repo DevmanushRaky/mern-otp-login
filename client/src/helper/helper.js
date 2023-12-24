@@ -1,9 +1,21 @@
 import axios from "axios";
+import { jwtDecode } from "jwt-decode";
 
-axios.defaults.baseURL=process.env.REACT_APP_SERVER_DOMAIN;
+
+
+axios.defaults.baseURL = process.env.REACT_APP_SERVER_DOMAIN;
 
 
 //  make api request 
+
+
+//  to get username from local strogae token 
+export async function getUsername() {
+    const token = localStorage.getItem('token')
+    if (!token) return Promise.reject(" can not find token ")
+    let decode = jwtDecode(token)
+    return decode
+}
 
 // authenticate function 
 export async function authenticate(username) {
@@ -86,19 +98,19 @@ export async function generateOTP(username) {
 // verify OTP
 export async function verifyOTP(username, code) {
     try {
-        const { data, status } = await axios.get('/api/verifyOTP', { params:{ username, code }})
-        return { data, status}
-} catch (error) {
-    return Promise.reject({ error })
-}
+        const { data, status } = await axios.get('/api/verifyOTP', { params: { username, code } })
+        return { data, status }
+    } catch (error) {
+        return Promise.reject({ error })
+    }
 }
 
 
 //  reset password 
-export async function resetPassword(username, password){
+export async function resetPassword(username, password) {
     try {
-        const {data, status} = await axios.put('/api/resetpassword', {username, password})
-        return Promise.resolve({data, status})
+        const { data, status } = await axios.put('/api/resetpassword', { username, password })
+        return Promise.resolve({ data, status })
     } catch (error) {
         return Promise.reject({ error })
     }
