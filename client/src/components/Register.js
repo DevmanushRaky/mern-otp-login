@@ -15,26 +15,26 @@ export default function Register() {
   const [file, setFile] = useState()
 
   const formik = useFormik({
-    initialValues: {
-      email: 'example01@gmail.com',
-      username: 'example01',
-      password: 'admin@01'
+    initialValues : {
+      email: 'rakesucluci@gmail.com',
+      username: 'devmanushraky',
+      password : 'Password@123'
     },
-    validate: registerValidation,
+    validate : registerValidation,
     validateOnBlur: false,
     validateOnChange: false,
-    onSubmit: async values => {
-      values = await Object.assign(values, { profile: file || '' })
+    onSubmit : async values => {
+      values = await Object.assign(values, { profile : file || ''})
       let registerPromise = registerUser(values)
       toast.promise(registerPromise, {
-        loading: "creating ...",
-        success: <b> Register successfull ...!</b>,
-        error: <b> Could not Register </b>
-      })
-      registerPromise.then(function(){navigate('/')});
+        loading: 'Creating...',
+        success : <b>Register Successfully...!</b>,
+        error : <b>Could not Register.</b>
+      });
+
+      registerPromise.then(function(){ navigate('/')});
     }
   })
-
   /** formik doensn't support file upload so we need to create this handler */
   const onUpload = async e => {
     const base64 = await convertToBase64(e.target.files[0]);
@@ -66,9 +66,9 @@ export default function Register() {
             </div>
 
             <div className="textbox flex flex-col items-center gap-6">
-              <input {...formik.getFieldProps('email')} className={styles.textbox} type="text" placeholder='Email*' />
-              <input {...formik.getFieldProps('username')} className={styles.textbox} type="text" placeholder='Username*' />
-              <input {...formik.getFieldProps('password')} className={styles.textbox} type="text" placeholder='Password*' />
+              <input {...formik.getFieldProps('email')} className={styles.textbox} type="text" autoComplete='off' placeholder='Email*' />
+              <input {...formik.getFieldProps('username')} className={styles.textbox} type="text" autoComplete='off' placeholder='Username*' />
+              <input {...formik.getFieldProps('password')} className={styles.textbox} type="text" autoComplete='off' placeholder='Password*' />
               <button className={styles.btn} type='submit'>Register</button>
             </div>
 

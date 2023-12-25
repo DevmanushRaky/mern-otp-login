@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import avatar from '../assets/profile.png';
 import { Toaster } from 'react-hot-toast';
@@ -11,12 +11,8 @@ import styles from '../styles/Username.module.css';
 export default function Username() {
 const navigate = useNavigate();
  const setUsername = useAuthStore( state =>state.setUsername)
- const username = useAuthStore( state =>state.auth.username)
- 
 
- useEffect (()=>{
-  console.log(username)
- })
+ 
   const formik = useFormik({
     initialValues : {
       username : 'rakesh123'

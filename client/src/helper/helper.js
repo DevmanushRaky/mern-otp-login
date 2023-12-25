@@ -39,15 +39,23 @@ export async function getUser({ username }) {
 // register the user 
 export async function registerUser(credentials) {
     try {
-        const { data: { msg }, status } = await axios.post(`/api/register`, credentials)
+        console.log("calling register api ")
+        console.log("user data= ", credentials)
+
+        const { data: { msg }, status } = await axios.post(`/api/register`, credentials);
+
+        console.log(" msg=",msg)
+        console.log("status=", status)
         let { username, email } = credentials;
-        //  send email
+
         if (status === 201) {
-            await axios.post('/api/registerMail', { username, userEmail: email, text: msg })
+           const registermail = await axios.post("/api/registerMail", {username,userEmail: email,text: msg,});
+           console.log("register mail request=",registermail)
         }
-        return Promise.resolve(msg)
+
+        return Promise.resolve(msg);
     } catch (error) {
-        return Promise.reject({ error })
+        return Promise.reject({ error });
     }
 }
 
@@ -67,7 +75,7 @@ export async function verifyPassword({ username, password }) {
 export async function updateUser(response) {
     try {
         const token = await localStorage.getItem('token');
-        const data = await axios.put('/api/updateuser', response, { headers: { "Authrization": `Bearer ${token}` } })
+        const data = await axios.put('/api/updateuser', response, { headers: { "Authorization": `Bearer ${token}` } })
 
         return Promise.resolve({ data })
     } catch (error) {
