@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Link , useNavigate} from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import avatar from '../assets/profile.png';
 import toast, { Toaster } from 'react-hot-toast';
 import { useFormik } from 'formik';
@@ -15,24 +15,35 @@ export default function Register() {
   const [file, setFile] = useState()
 
   const formik = useFormik({
-    initialValues : {
+    initialValues: {
       email: 'rakesucluci@gmail.com',
       username: 'devmanushraky',
-      password : 'Password@123'
+      password: 'Password@123'
     },
-    validate : registerValidation,
+    validate: registerValidation,
     validateOnBlur: false,
     validateOnChange: false,
-    onSubmit : async values => {
-      values = await Object.assign(values, { profile : file || ''})
-      let registerPromise = registerUser(values)
+    onSubmit: async values => {
+      values = await Object.assign(values, { profile: file || '' })
+      let registerPromise = registerUser(values);
+
       toast.promise(registerPromise, {
         loading: 'Creating...',
-        success : <b>Register Successfully...!</b>,
-        error : <b>Could not Register.</b>
+        success: <b>Register Successfully...!</b>,
+        error: (error) => <b>{error ? error.error : "Could not Register."}</b>
       });
+      // registerPromise.then(function () { navigate('/') });
 
-      registerPromise.then(function(){ navigate('/')});
+
+        registerPromise.then(() => navigate('/'),
+          error => {
+              console.error("Registration Error:", error.error);
+              // const errorMessage = error ? error.error : 'Could not Register.';
+              // toast.error(errorMessage);
+          }
+      );
+
+
     }
   })
   /** formik doensn't support file upload so we need to create this handler */

@@ -46,18 +46,25 @@ export async function registerUser(credentials) {
 
         const { data: { msg }, status } = await axios.post(`/api/register`, credentials);
 
-        console.log(" msg=",msg)
+        console.log("msg=",msg)
         console.log("status=", status)
         let { username, email } = credentials;
 
         if (status === 201) {
-           await axios.post("/api/registerMail", {username,userEmail: email,text: msg,});
-          
+           await axios.post("/api/registerMail", {username,userEmail: email,text: msg,});  
         }
 
         return Promise.resolve(msg);
     } catch (error) {
-        return Promise.reject({ error });
+        console.log("error=", error.response.data.error)
+        // Handle different HTTP status codes here
+        if (error.response && error.response.status === 409) {
+            // Conflict - Existing username or email
+            return Promise.reject({ error: error.response.data.error });
+        } else {
+            // Other errors
+            return Promise.reject({ error: "Could not register. Please try again later." });
+        }
     }
 }
 
