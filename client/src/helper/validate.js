@@ -7,10 +7,11 @@ import { authenticate } from './helper';
 export async function usernameValidate(values) {
     const errors = usernameVerify({}, values);
 
-    if(values.username){
+    if (values.username) {
         //  check user exist or not 
-        const {status} = await authenticate(values.username);
-        if( status !== 200){
+        const { status } = await authenticate(values.username);
+        console.log(" after api call return in validate =", status)
+        if (status !== 200) {
             errors.exit = toast.error('User does not exist ..!')
         }
     }

@@ -1,34 +1,42 @@
-/* eslint-disable */
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { getUsername } from "../helper/helper";
+import { getUsername } from '../helper/helper'
 
 axios.defaults.baseURL = process.env.REACT_APP_SERVER_DOMAIN;
 
 
-//  custome hook
+/** custom hook */
 export default function useFetch(query) {
-    
     const [getData, setData] = useState({ isLoading: false, apiData: undefined, status: null, serverError: null })
+    console.log(" fetch hook query=", query)
 
     useEffect(() => {
-        const fechData = async () => {
+        console.log(" executing useEffect in fetch hooks ")
+        const fetchData = async () => {
             try {
-                setData(prev => ({ ...prev, isLoading: true }))
+                setData(prev => ({ ...prev, isLoading: true }));
 
-               const { username } = !query ? await  getUsername() : "";
+                // Corrected conditional assignment to ensure username is not undefined
+                const { username } = !query ? await getUsername() : { username: '' };
+                console.log(" fetch hook query in useEffect=", query);
+                console.log(" fetch hook username in useEffect=", username);
+
+                // Corrected URL format by changing "user:" to "user/"
                 const { data, status } = !query ? await axios.get(`/api/user/${username}`) : await axios.get(`/api/${query}`);
+
                 if (status === 201) {
-                    setData(prev => ({ ...prev, isLoading: false }))
-                    setData(prev => ({ ...prev, apiData: data, status: status }))
+                    setData(prev => ({ ...prev, isLoading: false }));
+                    setData(prev => ({ ...prev, apiData: data, status: status }));
                 }
-                setData(prev => ({ ...prev, isLoading: false }))
+
+                setData(prev => ({ ...prev, isLoading: false }));
             } catch (error) {
                 setData(prev => ({ ...prev, isLoading: false, serverError: error }))
             }
-        }
-        fechData()
-    },[query])
+        };
+        fetchData()
 
-    return { getData, setData};
+    }, [query]);
+
+    return [getData, setData];
 }

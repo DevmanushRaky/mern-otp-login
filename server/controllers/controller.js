@@ -5,18 +5,36 @@ import ENV from '../config.js'
 import otpGenerator from 'otp-generator';
 
 /** middleware for verify user */
+
 export async function verifyUser(req, res, next) {
     try {
+        // Determine the source of the username based on the HTTP method
+        const { username } = req.method === "GET" ? req.query : req.body;
+        console.log("Username being queried:", username);
+        // Check if the username is provided
+        if (!username) {
+            return res.status(400).send({ error: "Username is required." });
+        }
 
-        const { username } = req.method == "GET" ? req.query : req.body;
+        // Check the user existence in the database
+        const existingUser = await UserModel.findOne({ username });
+        console.log("Existing User from the Database:", existingUser);
+        // If the user doesn't exist, return a 404 error
+        if (!existingUser) {
+            return res.status(404).send({ error: "User not found." });
+        }
 
-        // check the user existance
-        let exist = await UserModel.findOne({ username });
-        if (!exist) return res.status(404).send({ error: "Can't find User!" });
+        // Attach the user information to the request for further use if needed
+        req.user = existingUser;
+
+        // Continue to the next middleware or route
         next();
-
     } catch (error) {
-        return res.status(404).send({ error: "Authentication Error" });
+        // Log the error for debugging purposes
+        console.error("Error in verifyUser middleware:", error);
+
+        // Return a generic 500 error response
+        return res.status(500).send({ error: "Internal Server Error" });
     }
 }
 
@@ -39,7 +57,7 @@ export async function register(req, res) {
     try {
         const { username, password, profile, email } = req.body;
         console.log("Inside try block =", req.body);
-        
+
         // Check for existing username
         const existUsername = UserModel.findOne({ username }).exec();
 
@@ -144,29 +162,27 @@ export async function login(req, res) {
 
 /** GET: http://localhost:8080/api/user/example123 */
 export async function getUser(req, res) {
-
     const { username } = req.params;
+    console.log(" get user calling ", username)
 
     try {
-
         if (!username) return res.status(501).send({ error: "Invalid Username" });
 
-        UserModel.findOne({ username }, function (err, user) {
-            if (err) return res.status(500).send({ err });
-            if (!user) return res.status(501).send({ error: "Couldn't Find the User" });
+        // Use async/await to wait for the Mongoose query to complete
+        const user = await UserModel.findOne({ username }).exec();
 
-            /** remove password from user */
-            // mongoose return unnecessary data with object so convert it into json
-            const { password, ...rest } = Object.assign({}, user.toJSON());
+        if (!user) return res.status(501).send({ error: "Couldn't Find the User" });
 
-            return res.status(201).send(rest);
-        })
+        // Remove password from user
+        const { password, ...rest } = user.toJSON();
 
+        return res.status(201).send(rest);
     } catch (error) {
+        console.error("Error in getUser:", error);
         return res.status(404).send({ error: "Cannot Find User Data" });
     }
-
 }
+
 
 
 /** PUT: http://localhost:8080/api/updateuser 
