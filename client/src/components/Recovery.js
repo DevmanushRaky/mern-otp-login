@@ -9,25 +9,38 @@ import styles from '../styles/Username.module.css';
 export default function Recovery() {
   const navigate = useNavigate();
   const { username } = useAuthStore(state => state.auth)
-  const { OTP, setOTP } = useState();
+  const [OTP, setOTP] = useState();
 
   useEffect(() => {
-    generateOTP(username).then((OTP) => {
-      if (OTP) return toast.success('OTP hs been send to your email')
-      return toast.error('Problem while generating OTP')
-    })
-  }, [username])
+    const fetchOTP = async () => {
+      try {
+        const generatedOTP = await generateOTP(username);
+        if (generatedOTP) return toast.success('OTP has been sent to your email');
+        return toast.error('Problem while generating OTP');
+      } catch (error) {
+        console.error(error);
+        return toast.error('Problem while generating OTP');
+      }
+    };
+
+    fetchOTP();
+  }, [username]);
+
 
   async function onSubmit(e) {
     e.preventDefault();
     try {
-      let status = await verifyOTP({ username, code: OTP })
+      let { status } = await verifyOTP(username, OTP);
+
       if (status === 201) {
-        toast.success('verify Successfully')
-        return navigate('/reset')
+        toast.success('Verify Successfully');
+        navigate('/reset');
+      } else {
+        toast.error('Wrong OTP, please check your email again.');
       }
     } catch (error) {
-      return toast.error(' Wrong OTP check email again ')
+
+      toast.error('An error occurred during OTP verification. Please try again.');
     }
   }
 

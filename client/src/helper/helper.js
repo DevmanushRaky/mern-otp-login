@@ -112,10 +112,13 @@ export async function generateOTP(username) {
 
 // verify OTP
 export async function verifyOTP(username, code) {
+    console.log(" username=", username  , " otp =",code)
     try {
         const { data, status } = await axios.get('/api/verifyOTP', { params: { username, code } })
+       
         return { data, status }
     } catch (error) {
+       
         return Promise.reject({ error })
     }
 }

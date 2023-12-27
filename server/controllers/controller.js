@@ -225,6 +225,7 @@ export async function generateOTP(req, res) {
 /** GET: http://localhost:8080/api/verifyOTP */
 export async function verifyOTP(req, res) {
     const { code } = req.query;
+   
     if (parseInt(req.app.locals.OTP) === parseInt(code)) {
         req.app.locals.OTP = null; // reset the OTP value
         req.app.locals.resetSession = true; // start session for reset password
