@@ -8,18 +8,17 @@ axios.defaults.baseURL = process.env.REACT_APP_SERVER_DOMAIN;
 /** custom hook */
 export default function useFetch(query) {
     const [getData, setData] = useState({ isLoading: false, apiData: undefined, status: null, serverError: null })
-    console.log(" fetch hook query=", query)
+ 
 
     useEffect(() => {
-        console.log(" executing useEffect in fetch hooks ")
+       
         const fetchData = async () => {
             try {
                 setData(prev => ({ ...prev, isLoading: true }));
 
                 // Corrected conditional assignment to ensure username is not undefined
                 const { username } = !query ? await getUsername() : { username: '' };
-                console.log(" fetch hook query in useEffect=", query);
-                console.log(" fetch hook username in useEffect=", username);
+          
 
                 // Corrected URL format by changing "user:" to "user/"
                 const { data, status } = !query ? await axios.get(`/api/user/${username}`) : await axios.get(`/api/${query}`);

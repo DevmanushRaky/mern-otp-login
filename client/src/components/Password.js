@@ -13,7 +13,7 @@ export default function Password() {
 
   const navigate = useNavigate()
   const { username } = useAuthStore(state => state.auth)
-  console.log("in password =", username)
+
 
   const [{ isLoading, apiData, serverError }] = useFetch(`user/${username}`);
 

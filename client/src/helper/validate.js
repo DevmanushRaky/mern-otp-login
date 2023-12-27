@@ -10,7 +10,7 @@ export async function usernameValidate(values) {
     if (values.username) {
         //  check user exist or not 
         const { status } = await authenticate(values.username);
-        console.log(" after api call return in validate =", status)
+     
         if (status !== 200) {
             errors.exit = toast.error('User does not exist ..!')
         }

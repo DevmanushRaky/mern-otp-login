@@ -20,10 +20,10 @@ export async function getUsername() {
 // authenticate function 
 export async function authenticate(username) {
     try {
-        console.log(" inside helper calling  backend api =", username)
+      
         return await axios.post('/api/authenticate', { username })
     } catch (error) {
-        console.log(" inside helper =", error)
+       
         return { error: " Username doesn't exist..!!" }
     }
 }
@@ -41,13 +41,11 @@ export async function getUser({ username }) {
 // register the user 
 export async function registerUser(credentials) {
     try {
-        console.log("calling register api ")
-        console.log("user data= ", credentials)
+     
 
         const { data: { msg }, status } = await axios.post(`/api/register`, credentials);
 
-        console.log("msg=",msg)
-        console.log("status=", status)
+    
         let { username, email } = credentials;
 
         if (status === 201) {
@@ -56,7 +54,7 @@ export async function registerUser(credentials) {
 
         return Promise.resolve(msg);
     } catch (error) {
-        console.log("error=", error.response.data.error)
+      
         // Handle different HTTP status codes here
         if (error.response && error.response.status === 409) {
             // Conflict - Existing username or email

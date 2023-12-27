@@ -10,7 +10,7 @@ export async function verifyUser(req, res, next) {
     try {
         // Determine the source of the username based on the HTTP method
         const { username } = req.method === "GET" ? req.query : req.body;
-        console.log("Username being queried:", username);
+     
         // Check if the username is provided
         if (!username) {
             return res.status(400).send({ error: "Username is required." });
@@ -18,7 +18,7 @@ export async function verifyUser(req, res, next) {
 
         // Check the user existence in the database
         const existingUser = await UserModel.findOne({ username });
-        console.log("Existing User from the Database:", existingUser);
+       
         // If the user doesn't exist, return a 404 error
         if (!existingUser) {
             return res.status(404).send({ error: "User not found." });
@@ -31,7 +31,7 @@ export async function verifyUser(req, res, next) {
         next();
     } catch (error) {
         // Log the error for debugging purposes
-        console.error("Error in verifyUser middleware:", error);
+        
 
         // Return a generic 500 error response
         return res.status(500).send({ error: "Internal Server Error" });
@@ -51,80 +51,13 @@ export async function verifyUser(req, res, next) {
   "profile": ""
 }
 */
-// export async function register(req, res) {
-//     console.log("Calling register");
-
-//     try {
-//         const { username, password, profile, email } = req.body;
-//         console.log("Inside try block =", req.body);
-
-//         // Check for existing username
-//         const existUsername = UserModel.findOne({ username }).exec();
-
-//         // Check for existing email
-//         const existEmail = UserModel.findOne({ email }).exec();
-
-//         Promise.all([existUsername, existEmail])
-//             .then(([existingUsername, existingEmail]) => {
-//                 if (existingUsername) {
-//                     throw new Error("Please use a unique username");
-//                 }
-//                 if (existingEmail) {
-//                     throw new Error("Please use a unique email");
-//                 }
-
-//                 if (password) {
-//                     bcrypt.hash(password, 10)
-//                         .then(hashedPassword => {
-//                             const user = new UserModel({
-//                                 username,
-//                                 password: hashedPassword,
-//                                 profile: profile || '',
-//                                 email
-//                             });
-
-//                             console.log("Before saving to the database =", user);
-
-//                             // Save user to the database
-//                             user.save()
-//                                 .then(result => {
-//                                     console.log("Data saved in the database =", result);
-//                                     return res.status(201).send({ msg: "User registered successfully" });
-//                                 })
-//                                 .catch(error => {
-//                                     console.error("Error saving user to the database:", error);
-//                                     return res.status(500).send({ error: "Internal Server Error" });
-//                                 });
-//                         })
-//                         .catch(error => {
-//                             console.error("Error hashing password:", error);
-//                             return res.status(500).send({ error: "Unable to hash password" });
-//                         });
-//                 }
-//             })
-//             .catch(error => {
-//                 console.error("Error in Promise.all:", error);
-//                 return res.status(500).send({ error: "Internal Server Error" });
-//             });
-
-//     } catch (error) {
-//         console.error("Error in try block:", error);
-//         return res.status(500).send({ error: "Internal Server Error" });
-//     }
-// }
-
-
-
-
-
-
 
 export async function register(req, res) {
-    console.log("Calling register");
+   
 
     try {
         const { username, password, profile, email } = req.body;
-        console.log("Inside try block =", req.body);
+       
 
         // Check for existing username
         const existingUsername = await UserModel.findOne({ username }).exec();
@@ -150,17 +83,17 @@ export async function register(req, res) {
                 email
             });
 
-            console.log("Before saving to the database =", user);
+           
 
             // Save user to the database
             const result = await user.save();
 
-            console.log("Data saved in the database =", result);
+          
             return res.status(201).send({msg : "User registered successfully"});
         }
 
     } catch (error) {
-        console.error("Error in try block:", error);
+       
         return res.status(500).send({error: "Internal Server Error"});
     }
 }
@@ -224,7 +157,7 @@ export async function login(req, res) {
 /** GET: http://localhost:8080/api/user/example123 */
 export async function getUser(req, res) {
     const { username } = req.params;
-    console.log(" get user calling ", username)
+
 
     try {
         if (!username) return res.status(501).send({ error: "Invalid Username" });
@@ -239,7 +172,7 @@ export async function getUser(req, res) {
 
         return res.status(201).send(rest);
     } catch (error) {
-        console.error("Error in getUser:", error);
+       
         return res.status(404).send({ error: "Cannot Find User Data" });
     }
 }
