@@ -2,22 +2,15 @@ import nodemailer from "nodemailer";
 import Mailgen from "mailgen";
 import ENV from "../config.js";
 
-// Creating smtp server for sending email  for localhost
-// const nodeConfig = {
-//     service: "Gmail",
-//     auth: {
-//         user: ENV.EMAIL,
-//         pass: ENV.PASSWORD
-//     }
-// };
-// Creating smtp server for sending email for production
+// Creating smtp server for sending email 
 const nodeConfig = {
     service: "Gmail",
     auth: {
-        user: process.env.EMAIL,
-        pass: process.env.PASSWORD
+        user: ENV.EMAIL,
+        pass: ENV.PASSWORD
     }
 };
+
 
 let transporter = nodemailer.createTransport(nodeConfig);
 

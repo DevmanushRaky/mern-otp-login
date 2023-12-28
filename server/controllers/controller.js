@@ -1,7 +1,7 @@
 import UserModel from '../model/User.model.js'
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
-// import ENV from '../config.js'   // for development
+import ENV from '../config.js'   
 import otpGenerator from 'otp-generator';
 
 /** middleware for verify user */
@@ -128,16 +128,12 @@ export async function login(req, res) {
                         if (!passwordCheck) return res.status(400).send({ error: "Don't have Password" });
 
                         // create jwt token  for ddevelopemtn 
-                        // const token = jwt.sign({
-                        //     userId: user._id,
-                        //     username: user.username
-                        // }, ENV.JWT_SECRET, { expiresIn: "24h" });
-
-                        // create jwt token  for production 
                         const token = jwt.sign({
                             userId: user._id,
                             username: user.username
-                        }, process.env.JWT_SECRET, { expiresIn: "24h" });
+                        }, ENV.JWT_SECRET, { expiresIn: "24h" });
+
+                       
 
                         return res.status(200).send({
                             msg: "Login Successful...!",
