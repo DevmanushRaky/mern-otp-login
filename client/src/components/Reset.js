@@ -25,14 +25,17 @@ export default function Reset() {
 
   const formik = useFormik({
     initialValues: {
-      password: 'admin@123',
-      confirm_pwd: 'admin@123'
+      password: 'Admin@123',
+      confirm_pwd: 'Admin@123'
     },
     validate: resetPasswordValidation,
     validateOnBlur: false,
     validateOnChange: false,
     onSubmit: async values => {
-      let resetPromise = resetPassword({ username, password: values.password })
+      console.log("what username=",username)
+      console.log("what password=",values.password)
+      
+      let resetPromise = resetPassword({ username: username, password: values.password })
       toast.promise(resetPromise, {
         loading: "updating...",
         success: <b> Reset Successfully </b>,
