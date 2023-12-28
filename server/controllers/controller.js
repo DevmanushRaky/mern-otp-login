@@ -115,41 +115,33 @@ export async function register(req, res) {
 }
 */
 export async function login(req, res) {
-
     const { username, password } = req.body;
 
     try {
+        const user = await UserModel.findOne({ username });
 
-        UserModel.findOne({ username })
-            .then(user => {
-                bcrypt.compare(password, user.password)
-                    .then(passwordCheck => {
+        if (!user) {
+            return res.status(404).send({ error: "Username not Found" });
+        }
 
-                        if (!passwordCheck) return res.status(400).send({ error: "Don't have Password" });
+        const passwordCheck = await bcrypt.compare(password, user.password);
 
-                        // create jwt token  for ddevelopemtn 
-                        const token = jwt.sign({
-                            userId: user._id,
-                            username: user.username
-                        }, ENV.JWT_SECRET, { expiresIn: "24h" });
+        if (!passwordCheck) {
+            return res.status(401).send({ error: "Password does not Match" });
+        }
 
-                       
+        // create jwt token for development
+        const token = jwt.sign(
+            { userId: user._id, username: user.username },
+            ENV.JWT_SECRET,
+            { expiresIn: "24h" }
+        );
 
-                        return res.status(200).send({
-                            msg: "Login Successful...!",
-                            username: user.username,
-                            token
-                        });
-
-                    })
-                    .catch(error => {
-                        return res.status(400).send({ error: "Password does not Match" })
-                    })
-            })
-            .catch(error => {
-                return res.status(404).send({ error: "Username not Found" });
-            })
-
+        return res.status(200).send({
+            msg: "Login Successful...!",
+            username: user.username,
+            token
+        });
     } catch (error) {
         return res.status(500).send({ error });
     }

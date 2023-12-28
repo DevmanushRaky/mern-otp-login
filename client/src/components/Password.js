@@ -27,18 +27,31 @@ export default function Password() {
     validateOnChange: false,
     onSubmit: async values => {
 
-      let loginPromise = verifyPassword({ username, password: values.password })
-      toast.promise(loginPromise, {
-        loading: 'Checking...',
-        success: <b>Login Successfully...!</b>,
-        error: <b>Password Not Match!</b>
-      });
+      let loginPromise = verifyPassword({ username, password: values.password });
 
-      loginPromise.then(res => {
-        let { token } = res.data;
-        localStorage.setItem('token', token);
-        navigate('/profile')
-      })
+      loginPromise
+        .then((res) => {
+          console.log("response after checking password =", res);
+
+          // Check if res.data exists and has a token property
+          console.log("checking if condition =", res.data && res.data.token);
+          if (res.data && res.data.token) {
+            let { token } = res.data;
+            localStorage.setItem('token', token);
+            navigate('/profile');
+            toast.success(<b>Login Successfully...!</b>);
+          } else {
+            // Handle the case where the response doesn't have the expected structure
+            console.error("An error occurred during login: Invalid response format", res);
+            toast.error(res.error || "An error occurred during login");
+          }
+        })
+        .catch((error) => {
+          console.error("An error occurred during login:", error);
+          toast.error(error && error.error ? error.error : "An error occurred during login");
+        });
+
+
     }
   })
 
