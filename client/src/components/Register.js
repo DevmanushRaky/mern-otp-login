@@ -37,7 +37,7 @@ export default function Register() {
 
         registerPromise.then(() => navigate('/'),
           error => {
-              console.error("Registration Error:", error.error);
+              
               // const errorMessage = error ? error.error : 'Could not Register.';
               // toast.error(errorMessage);
           }

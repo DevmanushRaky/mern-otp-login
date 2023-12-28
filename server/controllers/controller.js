@@ -246,7 +246,7 @@ export async function createResetSession(req, res) {
 export async function resetPassword(req, res) {
     try {
         if (!req.app.locals.resetSession) {
-            console.log("Session expired!");
+          
             return res.status(404).send({ error: "Session expired!" });
         }
 
@@ -256,7 +256,7 @@ export async function resetPassword(req, res) {
             const user = await UserModel.findOne({ username });
 
             if (!user) {
-                console.log("Username not Found");
+              
                 return res.status(404).send({ error: "Username not Found" });
             }
 
@@ -265,16 +265,16 @@ export async function resetPassword(req, res) {
             await UserModel.updateOne({ username: user.username }, { password: hashedPassword });
 
             req.app.locals.resetSession = false; // reset session
-            console.log("Record Updated...!");
+        
             return res.status(201).send({ msg: "Record Updated...!" });
 
         } catch (error) {
-            console.error("Error updating password:", error);
+           
             return res.status(500).send({ error: "Error updating password" });
         }
 
     } catch (error) {
-        console.error("Catch block error:", error);
+       
         return res.status(401).send({ error });
     }
 }

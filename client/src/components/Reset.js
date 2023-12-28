@@ -32,9 +32,7 @@ export default function Reset() {
     validateOnBlur: false,
     validateOnChange: false,
     onSubmit: async values => {
-      console.log("what username=",username)
-      console.log("what password=",values.password)
-      
+    
       let resetPromise = resetPassword({ username: username, password: values.password })
       toast.promise(resetPromise, {
         loading: "updating...",

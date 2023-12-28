@@ -18,7 +18,7 @@ export default function Recovery() {
         if (generatedOTP) return toast.success('OTP has been sent to your email');
         return toast.error('Problem while generating OTP');
       } catch (error) {
-        console.error(error);
+        
         return toast.error('Problem while generating OTP');
       }
     };

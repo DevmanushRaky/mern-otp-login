@@ -82,7 +82,7 @@ export async function verifyPassword({ username, password }) {
 export async function updateUser(response) {
     try {
         const token = await localStorage.getItem('token');
-        console.log("token =", token)
+    
         const data = await axios.put('/api/updateuser', response, { headers: { "Authorization": `Bearer ${token}` } })
 
         return Promise.resolve({ data })
@@ -113,7 +113,7 @@ export async function generateOTP(username) {
 
 // verify OTP
 export async function verifyOTP(username, code) {
-    console.log(" username=", username  , " otp =",code)
+   
     try {
         const { data, status } = await axios.get('/api/verifyOTP', { params: { username, code } })
        
@@ -128,13 +128,12 @@ export async function verifyOTP(username, code) {
 //  reset password 
 export async function resetPassword({username, password}) {
     try {
-        console.log("what coming user name =",username , "Password =", password )
+     
         const { data, status } = await axios.put('/api/resetpassword', { username, password })
-        console.log(" data in reset password =", data)
-        console.log(" status in reset password =", status)
+      
         return Promise.resolve({ data, status })
     } catch (error) {
-        console.log( " error in reset password =", error)
+  
         return Promise.reject({ error })
     }
 }
