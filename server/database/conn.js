@@ -8,7 +8,7 @@ const ATLAS_URI = process.env.ATLAS_URI || ENV.ATLAS_URI;
 
   try {
     mongoose.set('strictQuery', true);
-    const db = await mongoose.connect(ENV.ATLAS_URI);
+    const db = await mongoose.connect(ATLAS_URI);
     console.log("Database Connected");
     return db;
   } catch (error) {
