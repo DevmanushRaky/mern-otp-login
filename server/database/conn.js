@@ -1,10 +1,11 @@
 import mongoose from "mongoose";
-import ENV from "../config.js";
+// import ENV from "../config.js";  // localhost
 
 async function connect() {
 
   // Use default environment variable or "default_mongo_uri" if not available
-const ATLAS_URI = process.env.ATLAS_URI || ENV.ATLAS_URI;
+  // const ATLAS_URI =  ENV.ATLAS_URI;    // for local host 
+const ATLAS_URI = process.env.ATLAS_URI 
 
   try {
     mongoose.set('strictQuery', true);
