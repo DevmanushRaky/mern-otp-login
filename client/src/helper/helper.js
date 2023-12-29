@@ -23,7 +23,7 @@ export async function authenticate(username) {
 
         return await axios.post('/api/authenticate', { username })
     } catch (error) {
-
+        console.error('Error in authenticate function:', error);
         return { error: " Username doesn't exist..!!" }
     }
 }

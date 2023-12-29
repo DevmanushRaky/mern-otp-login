@@ -8,13 +8,20 @@ export async function usernameValidate(values) {
     const errors = usernameVerify({}, values);
 
     if (values.username) {
-        //  check user exist or not 
-        const { status } = await authenticate(values.username);
-     
-        if (status !== 200) {
-            errors.exit = toast.error('User does not exist ..!')
+        try {
+            // Check if user exists
+            const response = await authenticate(values.username);
+            console.log(" responsie in validating user =", response)
+            if (response.status !== 200) {
+                errors.exit = toast.error('User does not exist ..!');
+            }
+        } catch (error) {
+            // Handle other errors
+            console.error('Error checking user existence in validate :', error);
+            errors.exit = toast.error('An error occurred while checking user existence.');
         }
     }
+
     return errors;
 }
 
