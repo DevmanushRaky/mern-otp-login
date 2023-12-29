@@ -8,7 +8,7 @@ import Register from "./components/Register"
 import Profile from "./components/Profile"
 import Recovery from "./components/Recovery"
 import Reset from "./components/Reset"
-import PageNotFound from "./components/PageNotFound"
+// import PageNotFound from "./components/PageNotFound"
 
 
 
@@ -43,10 +43,10 @@ const router = createBrowserRouter([
     path: '/reset',
     element: <Reset></Reset>
   },
-  {
-    path: '*',
-    element: <PageNotFound></PageNotFound>
-  },
+  // {
+  //   path: '*',
+  //   element: <PageNotFound></PageNotFound>
+  // },
 ])
 
 
