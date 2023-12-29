@@ -1,10 +1,11 @@
 // netlify/functions/error.js
-import React from 'react';
-import ReactDOMServer from 'react-dom/server';
-import PageNotFound from '../../src/components/PageNotFound';
+// functions/netlify/error.js
+const React = require('react');
+const ReactDOMServer = require('react-dom/server');
+const PageNotFound = require('../../client/src/components/PageNotFound');
 
 exports.handler = async (event, context) => {
-  const html = ReactDOMServer.renderToString(<PageNotFound />);
+  const html = ReactDOMServer.renderToString(React.createElement(PageNotFound));
   return {
     statusCode: 404,
     body: html,
@@ -13,7 +14,6 @@ exports.handler = async (event, context) => {
     },
   };
 };
-
 
 
 // // netlify/functions/error.js
