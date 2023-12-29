@@ -13,7 +13,7 @@ app.use(morgan('tiny'));
 app.disable("x-powered-by");
 
 
-const port = 5000;
+const port = process.env.PORT || 5000;
 
 // http get request only for checking 
 app.get('/', (req, res) => {
