@@ -1,7 +1,9 @@
-const React = require('react');
-const { Link } = require('react-router-dom');  // Updated import statement
+// page-not-found.js
 
-export default function PageNotFound() {
+const React = require('react');
+const { Link } = require('react-router-dom');
+
+function PageNotFound() {
   return (
     <div className="flex items-center justify-center h-screen">
       <div className="text-center">
@@ -14,3 +16,5 @@ export default function PageNotFound() {
     </div>
   );
 }
+
+module.exports = PageNotFound;

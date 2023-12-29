@@ -1,4 +1,5 @@
-// netlify/functions/error.js
+// error.js
+
 const React = require('react');
 const ReactDOMServer = require('react-dom/server');
 const PageNotFound = require('../../src/components/PageNotFound.js');
