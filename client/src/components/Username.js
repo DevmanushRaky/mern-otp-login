@@ -15,7 +15,7 @@ const navigate = useNavigate();
  
   const formik = useFormik({
     initialValues : {
-      username : 'devmanushraky1'
+      username : 'Username1'
     },
     validate : usernameValidate,
     validateOnBlur: false,
@@ -47,7 +47,7 @@ const navigate = useNavigate();
               </div>
 
               <div className="textbox flex flex-col items-center gap-6">
-                  <input {...formik.getFieldProps('username')} className={styles.textbox} type="text" placeholder='Username' />
+                  <input {...formik.getFieldProps('username')} className={styles.textbox} type="text" placeholder='Username' autoComplete='off' />
                   <button className={styles.btn} type='submit'>Let's Go</button>
               </div>
 
