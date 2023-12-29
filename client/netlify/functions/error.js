@@ -2,7 +2,7 @@
 // functions/netlify/error.js
 const React = require('react');
 const ReactDOMServer = require('react-dom/server');
-const PageNotFound = require('../../client/src/components/PageNotFound');
+const PageNotFound = require('../../src/components/PageNotFound');
 
 exports.handler = async (event, context) => {
   const html = ReactDOMServer.renderToString(React.createElement(PageNotFound));
