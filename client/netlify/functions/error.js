@@ -1,8 +1,7 @@
 // netlify/functions/error.js
-// functions/netlify/error.js
 const React = require('react');
 const ReactDOMServer = require('react-dom/server');
-const PageNotFound = require('../../src/components/PageNotFound');
+const PageNotFound = require('../../src/components/PageNotFound.js');
 
 exports.handler = async (event, context) => {
   const html = ReactDOMServer.renderToString(React.createElement(PageNotFound));
@@ -14,15 +13,3 @@ exports.handler = async (event, context) => {
     },
   };
 };
-
-
-// // netlify/functions/error.js
-// exports.handler = async () => {
-//   return {
-//     statusCode: 404,
-//     body: '<html><body><h1>Custom 404 Page</h1><p>Sorry, the page you are looking for does not exist.</p></body></html>',
-//     headers: {
-//       'Content-Type': 'text/html',
-//     },
-//   };
-// };
