@@ -15,7 +15,7 @@ const navigate = useNavigate();
 
  const formik = useFormik({
   initialValues: {
-    username: 'Username1'
+    username: 'username1'
   },
   validate: usernameValidate,
   validateOnBlur: false,
