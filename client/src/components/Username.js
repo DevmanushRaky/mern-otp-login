@@ -1,10 +1,11 @@
 import React from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import avatar from '../assets/profile.png';
-import { Toaster } from 'react-hot-toast';
+import toast, { Toaster } from 'react-hot-toast';
 import { useFormik } from 'formik';
 import { usernameValidate } from '../helper/validate'
 import { useAuthStore } from '../store/store';
+import { authenticate } from '../helper/helper';
 
 import styles from '../styles/Username.module.css';
 
@@ -12,19 +13,40 @@ export default function Username() {
 const navigate = useNavigate();
  const setUsername = useAuthStore( state =>state.setUsername)
 
- 
-  const formik = useFormik({
-    initialValues : {
-      username : 'username1'
-    },
-    validate : usernameValidate,
-    validateOnBlur: false,
-    validateOnChange: false,
-    onSubmit : async values => {
-      setUsername(values.username)
-      navigate('/password')
+ const formik = useFormik({
+  initialValues: {
+    username: 'Username1'
+  },
+  validate: usernameValidate,
+  validateOnBlur: false,
+  validateOnChange: false,
+  onSubmit: async values => {
+    try {
+      // Show loading toast while validating user
+      const loadingToastId = toast.loading('Validating user...');
+
+      // Check if user exists
+      const response = await authenticate(values.username);
+
+      // Dismiss the loading toast
+      toast.dismiss(loadingToastId);
+
+
+      if (response.status !== 200) {
+        toast.error('User does not exist ..!');
+      } else {
+        // User exists, proceed with navigation
+        setUsername(values.username);
+        navigate('/password');
+      }
+    } catch (error) {
+      // Handle other errors
+      console.error('Error checking user existence:', error);
+      toast.error('An error occurred while checking user existence.');
     }
-  })
+  }
+});
+
 
   return (
     <div className="container mx-auto">

@@ -26,12 +26,16 @@ export default function Password() {
     validateOnBlur: false,
     validateOnChange: false,
     onSubmit: async values => {
+      // Show loading toast while checking password
+      const loadingToastId = toast.loading('Checking password...');
 
       let loginPromise = verifyPassword({ username, password: values.password });
 
       loginPromise
         .then((res) => {
           console.log("response after checking password =", res);
+          // Dismiss the loading toast
+          toast.dismiss(loadingToastId);
 
           // Check if res.data exists and has a token property
           console.log("checking if condition =", res.data && res.data.token);
