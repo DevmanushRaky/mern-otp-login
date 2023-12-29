@@ -2,7 +2,7 @@
 
 const React = require('react');
 const ReactDOMServer = require('react-dom/server');
-const PageNotFound = require('../../src/components/PageNotFound.js');
+const PageNotFound = require('../../src/components/page-not-found.js');
 
 exports.handler = async (event, context) => {
   const html = ReactDOMServer.renderToString(React.createElement(PageNotFound));
