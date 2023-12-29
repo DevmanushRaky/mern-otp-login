@@ -1,9 +1,7 @@
-[[build]]
-  command = "npm run build"
-
-
-
 [[redirects]]
   from = "/*"
   to = "/.netlify/functions/error"
   status = 404
+
+[build]
+  command = "npm run build"
