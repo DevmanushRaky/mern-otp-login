@@ -20,10 +20,11 @@ export async function getUsername() {
 // authenticate function 
 export async function authenticate(username) {
     try {
-
-        return await axios.post('/api/authenticate', { username })
+        const authresponse = await axios.post('/api/authenticate', { username })
+        console.log("auth response in helper =", authresponse)
+        return authresponse
     } catch (error) {
-       
+        console.log("auth error in helper =", error)
         return { error: " Username doesn't exist..!!" }
     }
 }

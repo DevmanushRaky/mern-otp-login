@@ -10,42 +10,42 @@ import { authenticate } from '../helper/helper';
 import styles from '../styles/Username.module.css';
 
 export default function Username() {
-const navigate = useNavigate();
- const setUsername = useAuthStore( state =>state.setUsername)
+  const navigate = useNavigate();
+  const setUsername = useAuthStore(state => state.setUsername)
 
- const formik = useFormik({
-  initialValues: {
-    username: ''
-  },
-  validate: usernameValidate,
-  validateOnBlur: false,
-  validateOnChange: false,
-  onSubmit: async values => {
-    try {
-      // Show loading toast while validating user
-      const loadingToastId = toast.loading('Validating user...');
+  const formik = useFormik({
+    initialValues: {
+      username: ''
+    },
+    validate: usernameValidate,
+    validateOnBlur: false,
+    validateOnChange: false,
+    onSubmit: async values => {
+      try {
+        // Show loading toast while validating user
+        const loadingToastId = toast.loading('Validating user...');
 
-      // Check if user exists
-      const response = await authenticate(values.username);
+        // Check if user exists
+        const response = await authenticate(values.username);
+        console.log("responsie in username =", response)
+        // Dismiss the loading toast
+        toast.dismiss(loadingToastId);
 
-      // Dismiss the loading toast
-      toast.dismiss(loadingToastId);
 
-
-      if (response.status === 200) {
-        // User exists, proceed with navigation
-        setUsername(values.username);
-        navigate('/password');
-      } else {
-        toast.error('User does not exist ..!');
+        if (response.status !== 200) {
+          toast.error('User does not exist ..!');
+        } else {
+          // User exists, proceed with navigation
+          setUsername(values.username);
+          navigate('/password');
+        }
+      } catch (error) {
+        // Handle other errors
+        console.error('Error checking user existence:', error);
+        toast.error('An error occurred while checking user existence.');
       }
-    } catch (error) {
-      // Handle other errors
-      console.error('Error checking user existence:', error);
-      toast.error('An error occurred while checking user existence.');
     }
-  }
-});
+  });
 
 
   return (
@@ -64,18 +64,18 @@ const navigate = useNavigate();
           </div>
 
           <form className='py-1' onSubmit={formik.handleSubmit}>
-              <div className='profile flex justify-center py-4'>
-                  <img src={avatar} className={styles.profile_img} alt="avatar" />
-              </div>
+            <div className='profile flex justify-center py-4'>
+              <img src={avatar} className={styles.profile_img} alt="avatar" />
+            </div>
 
-              <div className="textbox flex flex-col items-center gap-6">
-                  <input {...formik.getFieldProps('username')} className={styles.textbox} type="text" placeholder='Username' autoComplete='off' />
-                  <button className={styles.btn} type='submit'>Let's Go</button>
-              </div>
+            <div className="textbox flex flex-col items-center gap-6">
+              <input {...formik.getFieldProps('username')} className={styles.textbox} type="text" placeholder='Username' autoComplete='off' />
+              <button className={styles.btn} type='submit'>Let's Go</button>
+            </div>
 
-              <div className="text-center py-4">
-                <span className='text-gray-500'>Not a Member <Link className='text-red-500' to="/register">Register Now</Link></span>
-              </div>
+            <div className="text-center py-4">
+              <span className='text-gray-500'>Not a Member <Link className='text-red-500' to="/register">Register Now</Link></span>
+            </div>
 
           </form>
 
