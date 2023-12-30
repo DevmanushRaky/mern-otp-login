@@ -15,7 +15,7 @@ const navigate = useNavigate();
 
  const formik = useFormik({
   initialValues: {
-    username: 'username1'
+    username: ''
   },
   validate: usernameValidate,
   validateOnBlur: false,
@@ -32,12 +32,12 @@ const navigate = useNavigate();
       toast.dismiss(loadingToastId);
 
 
-      if (response.status !== 200) {
-        toast.error('User does not exist ..!');
-      } else {
+      if (response.status === 200) {
         // User exists, proceed with navigation
         setUsername(values.username);
         navigate('/password');
+      } else {
+        toast.error('User does not exist ..!');
       }
     } catch (error) {
       // Handle other errors
